@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/joho/godotenv"
+	"github.com/c8112002/news-crawler/utils"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -11,15 +11,10 @@ import (
 	"time"
 )
 
-func loadEnv() {
-	err := godotenv.Load()
-	if err != nil {
+func main() {
+	if err := utils.LoadEnv(); err != nil {
 		panic(err.Error())
 	}
-}
-
-func main() {
-	loadEnv()
 
 	today := time.Now()
 	_1weekAgo := today.AddDate(0,0, -7)
@@ -34,14 +29,14 @@ func main() {
 }
 
 type Article struct {
-	Id string `json:"id"`
+	ID    string `json:"id"`
 	Title string `json:"title"`
-	Url string `json:"url"`
-	Likes int `json:"likes_count"`
+	URL   string `json:"url"`
+	Likes int    `json:"likes_count"`
 }
 
 func (a Article) String() string {
-	return fmt.Sprintf("id: %v, title: %v, url: %v, likes: %v", a.Id, a.Title, a.Url, a.Likes)
+	return fmt.Sprintf("id: %v, title: %v, url: %v, likes: %v", a.ID, a.Title, a.URL, a.Likes)
 }
 
 func fetchDataFromQiita(token string, tag string, from time.Time, to time.Time) ([]Article, error) {
