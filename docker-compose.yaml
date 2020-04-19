@@ -8,3 +8,51 @@ services:
     volumes:
       - ./:/go/app
     tty: true
+    networks:
+      - backend
+    depends_on:
+      - db
+  migrator:
+    build:
+      context: .
+      dockerfile: docker/go/Dockerfile_migration
+    volumes:
+      - ./:/go/app
+    tty: true
+    networks:
+      - backend
+    depends_on:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: docker/mysql/Dockerfile
+    container_name: news_crawler_db
+    volumes:
+      - db_data:/var/lib/mysql:cached
+    command: [
+      '--default-authentication-plugin=mysql_native_password',
+      '--character-set-server=utf8mb4',
+      '--skip-character-set-client-handshake',
+      '--collation-server=utf8mb4_general_ci',
+      '--slow-query-log=1',
+      '--long-query-time=1',
+      '--slow-query-log-file=/var/log/mysql/slow.log',
+      '--log-queries-not-using-indexes=0',
+      '--log-timestamps=SYSTEM'
+    ]
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: news_crawler
+      MYSQL_USER: news_crawler
+      MYSQL_PASSWORD: news_crawler_password
+    networks:
+      - backend
+
+volumes:
+  db_data:
+
+networks:
+  backend:

@@ -2,14 +2,21 @@
 
 ## Getting started
 
-dev
+### dev
 
 ```bash
 docker-compose up -d
 docker-compose exec app go run main.go
 ```
 
-production
+migration
+
+```bash
+./bin/dev.sh migrate! up
+```
+
+
+### production
 
 ```bash
 docker build -t crawler -f docker/go/Dockerfile .

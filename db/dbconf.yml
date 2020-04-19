@@ -1,0 +1,4 @@
+development:
+  dialect: mysql
+  datasource: news_crawler:news_crawler_password@tcp(db:3306)/news_crawler?charset=utf8mb4&parseTime=True&loc=Local
+  dir: db/migrations
