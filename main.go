@@ -73,7 +73,11 @@ func fetchDataFromQiita(token string, tag string, from time.Time, to time.Time) 
 		Header: header,
 	})
 
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			panic(err)
+		}
+	}()
 
 	if err != nil {
 		return articles, err
