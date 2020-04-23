@@ -7,6 +7,7 @@ services:
       target: build
     volumes:
       - ./:/go/app
+      - ./.env.development.docker:/go/app/.env.development:cached
     tty: true
     networks:
       - backend

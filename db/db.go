@@ -2,8 +2,8 @@ package db
 
 import (
 	"database/sql"
+
 	"github.com/c8112002/news-crawler/utils"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
 )
 
@@ -17,6 +17,8 @@ func New(env utils.Env) (*sql.DB, error) {
 	switch env {
 	case utils.Development:
 		return sql.Open(c.Development.Dialect, c.Development.Datasource)
+	case utils.DevelopmentDocker:
+		return sql.Open(c.DevelopmentDocker.Dialect, c.DevelopmentDocker.Datasource)
 	case utils.Production:
 		return sql.Open(c.Production.Dialect, c.Production.Datasource)
 	default:
@@ -47,8 +49,9 @@ func readDBConf() (*dbconf, error) {
 }
 
 type dbconf struct {
-	Development param
-	Production  param
+	Development       param
+	DevelopmentDocker param
+	Production        param
 }
 
 type param struct {

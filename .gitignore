@@ -1,3 +1,4 @@
 .idea
 news-crawler
 .env
+.env.local
