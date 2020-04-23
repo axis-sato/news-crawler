@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/c8112002/news-crawler/entities"
+
 	"github.com/c8112002/news-crawler/crawler"
 
 	"github.com/c8112002/news-crawler/db"
@@ -14,9 +16,7 @@ import (
 )
 
 func main() {
-	if err := utils.LoadEnv(); err != nil {
-		panic(err.Error())
-	}
+	loadEnv()
 
 	d, err := db.New(utils.GetEnv())
 
@@ -27,21 +27,17 @@ func main() {
 	defer d.Close()
 
 	ts := store.NewTagStore(d)
-	tags, err := ts.GetFollowingTag()
-	if err != nil {
-		panic(err.Error())
-	}
 
-	fmt.Println(tags)
+	tags := getTags(ts)
 
 	today := time.Now()
 	_1weekAgo := today.AddDate(0, 0, -7)
-	ac := crawler.ArticleCrawler{
-		Token: os.Getenv("QIITA_TOKEN"),
-		Tags:  tags.Names(),
-		From:  _1weekAgo,
-		To:    today,
-	}
+	ac := crawler.NewArticleCrawler(
+		os.Getenv("QIITA_TOKEN"),
+		tags.Names(),
+		_1weekAgo,
+		today,
+	)
 	articles, err := ac.Run()
 	if err != nil {
 		panic(err.Error())
@@ -50,4 +46,21 @@ func main() {
 	for _, a := range articles {
 		fmt.Println(a)
 	}
+}
+
+func loadEnv() {
+	if err := utils.LoadEnv(); err != nil {
+		panic(err.Error())
+	}
+}
+
+func getTags(ts *store.TagStore) *entities.Tags {
+	tags, err := ts.GetFollowingTag()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Println(tags)
+
+	return tags
 }

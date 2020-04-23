@@ -26,6 +26,15 @@ type ArticleCrawler struct {
 	To    time.Time
 }
 
+func NewArticleCrawler(token string, tags []string, from time.Time, to time.Time) *ArticleCrawler {
+	return &ArticleCrawler{
+		Token: token,
+		Tags:  tags,
+		From:  from,
+		To:    to,
+	}
+}
+
 func (a *ArticleCrawler) Run() ([]qiitaResult, error) {
 	fromDay := a.From.Format(qiitaTimeFormat)
 	toDay := a.To.Format(qiitaTimeFormat)
