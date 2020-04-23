@@ -2,10 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/c8112002/news-crawler/crawler"
-	"github.com/c8112002/news-crawler/utils"
 	"os"
 	"time"
+
+	"github.com/c8112002/news-crawler/crawler"
+
+	"github.com/c8112002/news-crawler/db"
+	"github.com/c8112002/news-crawler/store"
+	"github.com/c8112002/news-crawler/utils"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
@@ -13,11 +18,27 @@ func main() {
 		panic(err.Error())
 	}
 
+	d, err := db.New(utils.GetEnv())
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer d.Close()
+
+	ts := store.NewTagStore(d)
+	tags, err := ts.GetFollowingTag()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Println(tags)
+
 	today := time.Now()
-	_1weekAgo := today.AddDate(0,0, -7)
+	_1weekAgo := today.AddDate(0, 0, -7)
 	ac := crawler.ArticleCrawler{
 		Token: os.Getenv("QIITA_TOKEN"),
-		Tags:  []string{"go", "kotlin"},
+		Tags:  tags.Names(),
 		From:  _1weekAgo,
 		To:    today,
 	}
