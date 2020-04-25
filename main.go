@@ -32,9 +32,9 @@ func main() {
 
 	today := time.Now()
 	_1weekAgo := today.AddDate(0, 0, -7)
-	ac := crawler.NewArticleCrawler(
+	ac := crawler.NewQiitaCrawler(
 		os.Getenv("QIITA_TOKEN"),
-		tags.Names(),
+		tags,
 		_1weekAgo,
 		today,
 	)

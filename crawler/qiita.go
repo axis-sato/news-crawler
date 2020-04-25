@@ -9,6 +9,8 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/c8112002/news-crawler/entities"
+
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -19,15 +21,15 @@ const (
 	qiitaTimeFormat = "2006-01-02"
 )
 
-type ArticleCrawler struct {
+type QiitaCrawler struct {
 	Token string
-	Tags  []string
+	Tags  *entities.Tags
 	From  time.Time
 	To    time.Time
 }
 
-func NewArticleCrawler(token string, tags []string, from time.Time, to time.Time) *ArticleCrawler {
-	return &ArticleCrawler{
+func NewQiitaCrawler(token string, tags *entities.Tags, from time.Time, to time.Time) *QiitaCrawler {
+	return &QiitaCrawler{
 		Token: token,
 		Tags:  tags,
 		From:  from,
@@ -35,15 +37,15 @@ func NewArticleCrawler(token string, tags []string, from time.Time, to time.Time
 	}
 }
 
-func (a *ArticleCrawler) Run() ([]qiitaResult, error) {
+func (a *QiitaCrawler) Run() ([]qiitaResult, error) {
 	fromDay := a.From.Format(qiitaTimeFormat)
 	toDay := a.To.Format(qiitaTimeFormat)
 
 	var results []qiitaResult
 
-	for _, tag := range a.Tags {
+	for _, tag := range *a.Tags {
 
-		query := fmt.Sprintf("&query=tag:%s+created:>=%s+created:<=%s", tag, fromDay, toDay)
+		query := fmt.Sprintf("&query=tag:%s+created:>=%s+created:<=%s", tag.Name, fromDay, toDay)
 
 		var items []qiitaItem
 
@@ -100,7 +102,7 @@ func (a *ArticleCrawler) Run() ([]qiitaResult, error) {
 				crawlThumbnail(&item)
 				popularItems = append(popularItems, item)
 			}
-			results = append(results, qiitaResult{Tag: tag, Items: popularItems})
+			results = append(results, qiitaResult{Tag: &tag, Items: popularItems})
 			return results, nil
 		}()
 	}
@@ -158,6 +160,6 @@ func (a qiitaItem) String() string {
 }
 
 type qiitaResult struct {
-	Tag   string
+	Tag   *entities.Tag
 	Items []qiitaItem
 }
