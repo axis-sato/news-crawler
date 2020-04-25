@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/c8112002/news-crawler/entities"
-
 	"github.com/c8112002/news-crawler/crawler"
+
+	"github.com/c8112002/news-crawler/entities"
 
 	"github.com/c8112002/news-crawler/db"
 	"github.com/c8112002/news-crawler/store"
@@ -16,6 +16,8 @@ import (
 )
 
 func main() {
+	now := time.Now()
+
 	loadEnv()
 
 	d, err := db.New(utils.GetEnv())
@@ -27,6 +29,8 @@ func main() {
 	defer d.Close()
 
 	ts := store.NewTagStore(d)
+	ss := store.NewSiteStore(d)
+	as := store.NewArticleStore(d)
 
 	tags := getTags(ts)
 
@@ -38,13 +42,19 @@ func main() {
 		_1weekAgo,
 		today,
 	)
-	articles, err := ac.Run()
+	qiitaResults, err := ac.Run()
 	if err != nil {
 		panic(err.Error())
 	}
 
-	for _, a := range articles {
-		fmt.Println(a)
+	qiita := getQiita(ss)
+	for _, r := range qiitaResults {
+		var articles []*entities.Article
+		for _, item := range r.Items {
+			a := entities.NewArticle(item.ID, item.Title, item.URL, item.Thumbnail, now)
+			articles = append(articles, a)
+		}
+		_ = as.SaveArticles(articles, r.Tag, qiita)
 	}
 }
 
@@ -63,4 +73,13 @@ func getTags(ts *store.TagStore) *entities.Tags {
 	fmt.Println(tags)
 
 	return tags
+}
+
+func getQiita(ss *store.SiteStore) *entities.Site {
+	qiita, err := ss.GetQiita()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return qiita
 }
