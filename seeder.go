@@ -4,10 +4,10 @@ import (
 	"github.com/c8112002/news-crawler/db"
 	"github.com/c8112002/news-crawler/db/seeds"
 	"github.com/c8112002/news-crawler/utils"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-
-func main()  {
+func main() {
 
 	if err := utils.LoadEnv(); err != nil {
 		panic(err.Error())
