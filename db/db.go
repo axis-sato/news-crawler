@@ -2,9 +2,9 @@ package db
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/c8112002/news-crawler/utils"
-	"github.com/spf13/viper"
 )
 
 func New(env utils.Env) (*sql.DB, error) {
@@ -24,38 +24,28 @@ func New(env utils.Env) (*sql.DB, error) {
 	default:
 		return sql.Open(c.Development.Dialect, c.Development.Datasource)
 	}
-
 }
 
-func readDBConf() (*dbconf, error) {
-	var c dbconf
-
-	viper.SetConfigName("dbconf")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
-	viper.AddConfigPath("..")
-	viper.AddConfigPath("./db")
-	viper.AddConfigPath("../db")
-
-	if err := viper.ReadInConfig(); err != nil {
-		return &c, err
+func Transaction(txFunc func(*sql.Tx) error, db *sql.DB) error {
+	tx, err := db.Begin()
+	if err != nil {
+		return err
 	}
 
-	if err := viper.Unmarshal(&c); err != nil {
-		return &c, err
-	}
+	defer func() {
+		if p := recover(); p != nil {
+			log.Println("Recover")
+			_ = tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			log.Println("Rollback")
+			err = tx.Rollback()
+		} else {
+			log.Println("Commit")
+			err = tx.Commit()
+		}
+	}()
 
-	return &c, nil
-}
-
-type dbconf struct {
-	Development       param
-	DevelopmentDocker param
-	Production        param
-}
-
-type param struct {
-	Dialect    string
-	Datasource string
-	Dir        string
+	err = txFunc(tx)
+	return err
 }
