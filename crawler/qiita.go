@@ -37,11 +37,11 @@ func NewQiitaCrawler(token string, tags *entities.Tags, from time.Time, to time.
 	}
 }
 
-func (a *QiitaCrawler) Run() ([]qiitaResult, error) {
+func (a *QiitaCrawler) Run() ([]QiitaResult, error) {
 	fromDay := a.From.Format(qiitaTimeFormat)
 	toDay := a.To.Format(qiitaTimeFormat)
 
-	var results []qiitaResult
+	var results []QiitaResult
 
 	for _, tag := range *a.Tags {
 
@@ -77,7 +77,7 @@ func (a *QiitaCrawler) Run() ([]qiitaResult, error) {
 			panic(err.Error())
 		}
 
-		results, err = func() ([]qiitaResult, error) {
+		results, err = func() ([]QiitaResult, error) {
 			defer func() {
 				if err := resp.Body.Close(); err != nil {
 					panic(err)
@@ -103,8 +103,7 @@ func (a *QiitaCrawler) Run() ([]qiitaResult, error) {
 				popularItems = append(popularItems, item)
 			}
 			t := tag // tagはループの度に上書きされてしまうのでここでコピーする
-			res := qiitaResult{Tag: &t, Items: popularItems}
-			fmt.Println(res)
+			res := QiitaResult{Tag: &t, Items: popularItems}
 			results = append(results, res)
 			return results, nil
 		}()
@@ -161,7 +160,7 @@ func (a qiitaItem) String() string {
 	return fmt.Sprintf("id: %v, title: %v, url: %v, likes: %v, thumbnail: %v", a.ID, a.Title, a.URL, a.Likes, a.Thumbnail)
 }
 
-type qiitaResult struct {
+type QiitaResult struct {
 	Tag   *entities.Tag
 	Items []qiitaItem
 }

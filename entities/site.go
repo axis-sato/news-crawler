@@ -11,5 +11,5 @@ type Site struct {
 }
 
 func (s Site) String() string {
-	return fmt.Sprintf("id: %v, name: %v, url: %v", s.ID, s.Name, s.URL)
+	return fmt.Sprintf("{id: %v, name: %v, url: %v}", s.ID, s.Name, s.URL)
 }

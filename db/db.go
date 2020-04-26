@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"log"
 
 	"github.com/c8112002/news-crawler/utils"
 )
@@ -34,14 +33,11 @@ func Transaction(txFunc func(*sql.Tx) error, db *sql.DB) error {
 
 	defer func() {
 		if p := recover(); p != nil {
-			log.Println("Recover")
 			_ = tx.Rollback()
 			panic(p)
 		} else if err != nil {
-			log.Println("Rollback")
 			err = tx.Rollback()
 		} else {
-			log.Println("Commit")
 			err = tx.Commit()
 		}
 	}()

@@ -29,5 +29,5 @@ func NewArticle(originalID string, title string, url string, image string, crawl
 }
 
 func (a Article) String() string {
-	return fmt.Sprintf("id: %v, title: %v, url: %v, image: %v, crawledAt: %v, site: %v, tags: %v", a.ID, a.Title, a.URL, a.Image, a.CrawledAt, a.Site, a.Tags)
+	return fmt.Sprintf("{id: %v, title: %v, url: %v, image: %v, crawledAt: %v, site: %v, tags: %v}", a.ID, a.Title, a.URL, a.Image, a.CrawledAt, a.Site, a.Tags)
 }

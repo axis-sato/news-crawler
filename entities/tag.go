@@ -8,7 +8,7 @@ type Tag struct {
 }
 
 func (t Tag) String() string {
-	return fmt.Sprintf("id: %v, name: %v", t.ID, t.Name)
+	return fmt.Sprintf("{id: %v, name: %v}", t.ID, t.Name)
 }
 
 type Tags []Tag
