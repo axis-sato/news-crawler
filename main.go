@@ -54,7 +54,11 @@ func main() {
 			a := entities.NewArticle(item.ID, item.Title, item.URL, item.Thumbnail, now)
 			articles = append(articles, a)
 		}
-		_ = as.SaveArticles(articles, r.Tag, qiita)
+		res, err := as.SaveArticles(articles, r.Tag, qiita)
+		if err != nil {
+			panic(err.Error())
+		}
+		fmt.Println(res)
 	}
 }
 
