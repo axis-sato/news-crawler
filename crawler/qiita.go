@@ -102,7 +102,10 @@ func (a *QiitaCrawler) Run() ([]qiitaResult, error) {
 				crawlThumbnail(&item)
 				popularItems = append(popularItems, item)
 			}
-			results = append(results, qiitaResult{Tag: &tag, Items: popularItems})
+			t := tag // tagはループの度に上書きされてしまうのでここでコピーする
+			res := qiitaResult{Tag: &t, Items: popularItems}
+			fmt.Println(res)
+			results = append(results, res)
 			return results, nil
 		}()
 	}
@@ -143,7 +146,6 @@ func crawlThumbnail(item *qiitaItem) {
 	}
 
 	thumbnail, _ := doc.Find("meta[property='og:image']").First().Attr("content")
-	fmt.Println(thumbnail)
 	item.Thumbnail = thumbnail
 }
 
