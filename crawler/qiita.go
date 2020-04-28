@@ -37,13 +37,13 @@ func NewQiitaCrawler(token string, tags *entities.Tags, from time.Time, to time.
 	}
 }
 
-func (a *QiitaCrawler) Run() ([]QiitaResult, error) {
-	fromDay := a.From.Format(qiitaTimeFormat)
-	toDay := a.To.Format(qiitaTimeFormat)
+func (qc *QiitaCrawler) Run() ([]QiitaResult, error) {
+	fromDay := qc.From.Format(qiitaTimeFormat)
+	toDay := qc.To.Format(qiitaTimeFormat)
 
 	var results []QiitaResult
 
-	for _, tag := range *a.Tags {
+	for _, tag := range *qc.Tags {
 
 		query := fmt.Sprintf("&query=tag:%s+created:>=%s+created:<=%s", tag.Name, fromDay, toDay)
 
@@ -56,10 +56,10 @@ func (a *QiitaCrawler) Run() ([]QiitaResult, error) {
 
 		var header http.Header
 
-		if len(a.Token) > 0 {
+		if len(qc.Token) > 0 {
 			header = http.Header{
 				"Content-Type":  {"application/json"},
-				"Authorization": {"Bearer " + a.Token},
+				"Authorization": {"Bearer " + qc.Token},
 			}
 		} else {
 			header = http.Header{
