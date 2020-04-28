@@ -45,6 +45,8 @@ func main() {
 	// Qiitaのクローリング
 	services.NewQiitaService(now, tags, ss, as).
 		Crawl()
+	services.NewDevToService(tags).
+		Crawl()
 
 }
 

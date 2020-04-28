@@ -47,8 +47,6 @@ func (qc *QiitaCrawler) Run() ([]QiitaResult, error) {
 
 		query := fmt.Sprintf("&query=tag:%s+created:>=%s+created:<=%s", tag.Name, fromDay, toDay)
 
-		var items []qiitaItem
-
 		endpoint, err := url.Parse(qiitaBaseURL + qiitaAction + qiitaBaseParams + query)
 		if err != nil {
 			return results, err
@@ -77,6 +75,7 @@ func (qc *QiitaCrawler) Run() ([]QiitaResult, error) {
 			panic(err.Error())
 		}
 
+		var items []qiitaItem
 		results, err = func() ([]QiitaResult, error) {
 			defer func() {
 				if err := resp.Body.Close(); err != nil {
@@ -157,7 +156,7 @@ type qiitaItem struct {
 }
 
 func (a qiitaItem) String() string {
-	return fmt.Sprintf("id: %v, title: %v, url: %v, likes: %v, thumbnail: %v", a.ID, a.Title, a.URL, a.Likes, a.Thumbnail)
+	return fmt.Sprintf("{id: %v, title: %v, url: %v, likes: %v, thumbnail: %v}", a.ID, a.Title, a.URL, a.Likes, a.Thumbnail)
 }
 
 type QiitaResult struct {
