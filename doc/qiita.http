@@ -1,0 +1,2 @@
+### GET Items
+GET https://qiita.com/api/v2/items?page=1&per_page=3&query=tag:go
