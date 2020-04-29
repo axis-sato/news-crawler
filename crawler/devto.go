@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/c8112002/news-crawler/entities"
 )
@@ -28,8 +29,8 @@ func NewDevToCrawler(tags *entities.Tags, lastNDays int) *DevToCrawler {
 	}
 }
 
-func (dc *DevToCrawler) Run() ([]DevToResult, error) {
-	var results []DevToResult
+func (dc *DevToCrawler) Run() ([]CrawlingResult, error) {
+	var results []CrawlingResult
 	for _, tag := range *dc.Tags {
 
 		query := fmt.Sprintf("%v&tag=%v&top=%v", devToBaseParams, tag.Name, dc.LastNDays)
@@ -47,8 +48,7 @@ func (dc *DevToCrawler) Run() ([]DevToResult, error) {
 			return results, err
 		}
 
-		var articles []devToArticle
-		results, err = func() ([]DevToResult, error) {
+		results, err = func() ([]CrawlingResult, error) {
 			defer func() {
 				if err := resp.Body.Close(); err != nil {
 					panic(err.Error())
@@ -60,14 +60,21 @@ func (dc *DevToCrawler) Run() ([]DevToResult, error) {
 				return results, err
 			}
 
-			if err := json.Unmarshal(b, &articles); err != nil {
+			var responses []devToResponse
+
+			if err := json.Unmarshal(b, &responses); err != nil {
 				return results, err
 			}
 
+			var resp []ArticleResponse
+			for _, dr := range responses {
+				resp = append(resp, dr)
+			}
+
 			t := tag // tagはループの度に上書きされてしまうのでここでコピーする
-			res := DevToResult{
-				Tag:      &t,
-				Articles: articles,
+			res := CrawlingResult{
+				Tag:       &t,
+				Responses: resp,
 			}
 			results = append(results, res)
 
@@ -83,7 +90,7 @@ func (dc *DevToCrawler) Run() ([]DevToResult, error) {
 	return results, nil
 }
 
-type devToArticle struct {
+type devToResponse struct {
 	ID        int    `json:"id"`
 	Title     string `json:"title"`
 	URL       string `json:"url"`
@@ -91,11 +98,6 @@ type devToArticle struct {
 	Thumbnail string `json:"social_image"`
 }
 
-func (d *devToArticle) String() string {
-	return fmt.Sprintf("{id: %v, title: %v, url: %v, likes: %v, thumbnail: %v}", d.ID, d.Title, d.URL, d.Likes, d.Thumbnail)
-}
-
-type DevToResult struct {
-	Tag      *entities.Tag
-	Articles []devToArticle
+func (r devToResponse) ToArticle() *Article {
+	return NewArticle(strconv.Itoa(r.ID), r.Title, r.URL, r.Likes, r.Thumbnail)
 }

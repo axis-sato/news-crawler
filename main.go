@@ -43,10 +43,11 @@ func main() {
 	}).Debug("クロール対象のタグ")
 
 	// Qiitaのクローリング
-	services.NewQiitaService(now, tags, ss, as).
-		Crawl()
-	services.NewDevToService(tags).
-		Crawl()
+	_ = services.NewQiitaService(tags, ss, as).
+		Crawl(now)
+	// Dev.toのクローリング
+	_ = services.NewDevToService(tags, ss, as).
+		Crawl(now)
 
 }
 

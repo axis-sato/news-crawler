@@ -37,11 +37,11 @@ func NewQiitaCrawler(token string, tags *entities.Tags, from time.Time, to time.
 	}
 }
 
-func (qc *QiitaCrawler) Run() ([]QiitaResult, error) {
+func (qc *QiitaCrawler) Run() ([]CrawlingResult, error) {
 	fromDay := qc.From.Format(qiitaTimeFormat)
 	toDay := qc.To.Format(qiitaTimeFormat)
 
-	var results []QiitaResult
+	var results []CrawlingResult
 
 	for _, tag := range *qc.Tags {
 
@@ -75,8 +75,7 @@ func (qc *QiitaCrawler) Run() ([]QiitaResult, error) {
 			panic(err.Error())
 		}
 
-		var items []qiitaItem
-		results, err = func() ([]QiitaResult, error) {
+		results, err = func() ([]CrawlingResult, error) {
 			defer func() {
 				if err := resp.Body.Close(); err != nil {
 					panic(err)
@@ -92,17 +91,18 @@ func (qc *QiitaCrawler) Run() ([]QiitaResult, error) {
 				return results, err
 			}
 
-			if err := json.Unmarshal(b, &items); err != nil {
+			var responses []qiitaResponse
+			if err := json.Unmarshal(b, &responses); err != nil {
 				return results, err
 			}
 
-			var popularItems []qiitaItem
-			for _, item := range extractPopularItems(items) {
+			var resp []ArticleResponse
+			for _, item := range extractPopularItems(responses) {
 				crawlThumbnail(&item)
-				popularItems = append(popularItems, item)
+				resp = append(resp, item)
 			}
 			t := tag // tagはループの度に上書きされてしまうのでここでコピーする
-			res := QiitaResult{Tag: &t, Items: popularItems}
+			res := CrawlingResult{Tag: &t, Responses: resp}
 			results = append(results, res)
 			return results, nil
 		}()
@@ -111,8 +111,8 @@ func (qc *QiitaCrawler) Run() ([]QiitaResult, error) {
 	return results, nil
 }
 
-func extractPopularItems(source []qiitaItem) []qiitaItem {
-	var articles []qiitaItem
+func extractPopularItems(source []qiitaResponse) []qiitaResponse {
+	var articles []qiitaResponse
 	for _, a := range source {
 		if a.Likes >= 10 {
 			articles = append(articles, a)
@@ -122,7 +122,7 @@ func extractPopularItems(source []qiitaItem) []qiitaItem {
 	return articles
 }
 
-func crawlThumbnail(item *qiitaItem) {
+func crawlThumbnail(item *qiitaResponse) {
 	res, err := http.Get(item.URL)
 	if err != nil {
 		log.Fatal(err)
@@ -147,7 +147,7 @@ func crawlThumbnail(item *qiitaItem) {
 	item.Thumbnail = thumbnail
 }
 
-type qiitaItem struct {
+type qiitaResponse struct {
 	ID        string `json:"id"`
 	Title     string `json:"title"`
 	URL       string `json:"url"`
@@ -155,11 +155,6 @@ type qiitaItem struct {
 	Thumbnail string
 }
 
-func (a qiitaItem) String() string {
-	return fmt.Sprintf("{id: %v, title: %v, url: %v, likes: %v, thumbnail: %v}", a.ID, a.Title, a.URL, a.Likes, a.Thumbnail)
-}
-
-type QiitaResult struct {
-	Tag   *entities.Tag
-	Items []qiitaItem
+func (r qiitaResponse) ToArticle() *Article {
+	return NewArticle(r.ID, r.Title, r.URL, r.Likes, r.Thumbnail)
 }
