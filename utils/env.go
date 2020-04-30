@@ -37,9 +37,7 @@ func GetEnv() Env {
 		return Development
 	case "development-docker":
 		return DevelopmentDocker
-	case "production":
-		return Production
 	default:
-		return Development
+		return Production
 	}
 }

@@ -5,17 +5,21 @@ WORKDIR /go/app
 COPY . .
 
 RUN set -ex \
-    && go build -o crawler
+    && go build -o dist/crawler main.go
 
 
 FROM alpine
 
 WORKDIR /app
 
-COPY --from=build /go/app/crawler .
+ENV APP_ENV=production
+
+COPY --from=build /go/app/dist/crawler .
+COPY --from=build /go/app/db/dbconf.yml .
 
 RUN addgroup go \
     && adduser -D -G go go \
-    && chown -R go:go /app/crawler
+    && chown -R go:go /app/crawler \
+    && chown -R go:go /app/dbconf.yml
 
 CMD ["./crawler"]
