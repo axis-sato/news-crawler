@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: docker/go/Dockerfile
+      dockerfile: docker/go/Dockerfile-crawler
       target: build
     volumes:
       - ./:/go/app
@@ -16,7 +16,7 @@ services:
   migrator:
     build:
       context: .
-      dockerfile: docker/go/Dockerfile_migration
+      dockerfile: docker/go/Dockerfile-migration
     volumes:
       - ./:/go/app
     tty: true

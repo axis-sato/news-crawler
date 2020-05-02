@@ -9,14 +9,14 @@ import (
 )
 
 const (
-	sitesCSVPath = "./db/seeds/master/sites.csv"
-	tagsCSVPath = "./db/seeds/master/tags.csv"
+	sitesCSVPath = "./internal/pkg/db/seeds/master/sites.csv"
+	tagsCSVPath  = "./internal/pkg/db/seeds/master/tags.csv"
 )
 
 type site struct {
-	ID int
+	ID   int
 	Name string
-	URL string
+	URL  string
 }
 
 func (c site) String() string {
@@ -73,8 +73,8 @@ func ReadSitesCSV() ([]site, error) {
 }
 
 type tag struct {
-	ID int
-	Name string
+	ID         int
+	Name       string
 	IsFollowed int
 }
 

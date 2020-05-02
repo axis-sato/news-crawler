@@ -1,16 +1,18 @@
 package db
 
-import "github.com/spf13/viper"
+import (
+	"path/filepath"
+
+	"github.com/spf13/viper"
+)
 
 func readDBConf() (*dbconf, error) {
 	var c dbconf
 
 	viper.SetConfigName("dbconf")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
-	viper.AddConfigPath("..")
-	viper.AddConfigPath("./db")
-	viper.AddConfigPath("../db")
+	viper.AddConfigPath("./internal/pkg/db")
+	viper.AddConfigPath(filepath.Join("$GOPATH", "src", "github.com", "c8112002", "news-crawler", "internal", "pkg", "db"))
 
 	if err := viper.ReadInConfig(); err != nil {
 		return &c, err

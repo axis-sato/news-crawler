@@ -3,7 +3,7 @@ package store
 import (
 	"database/sql"
 
-	"github.com/c8112002/news-crawler/entities"
+	"github.com/c8112002/news-crawler/internal/pkg/entities"
 )
 
 const (

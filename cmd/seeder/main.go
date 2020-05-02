@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/c8112002/news-crawler/db"
-	"github.com/c8112002/news-crawler/db/seeds"
-	"github.com/c8112002/news-crawler/utils"
+	"github.com/c8112002/news-crawler/internal/pkg/db"
+	"github.com/c8112002/news-crawler/internal/pkg/db/seeds"
+	"github.com/c8112002/news-crawler/internal/pkg/utils"
 	_ "github.com/go-sql-driver/mysql"
 )
 

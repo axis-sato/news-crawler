@@ -5,7 +5,7 @@ WORKDIR /go/app
 COPY . .
 
 RUN set -ex \
-    && go build -o dist/crawler main.go
+    && go build -o build/crawler ./cmd/crawler/main.go
 
 
 FROM alpine
@@ -14,7 +14,7 @@ WORKDIR /app
 
 ENV APP_ENV=production
 
-COPY --from=build /go/app/dist/crawler .
+COPY --from=build /go/app/build/crawler .
 COPY --from=build /go/app/db/dbconf.yml .
 
 RUN addgroup go \

@@ -3,7 +3,8 @@ package seeds
 import (
 	"database/sql"
 	"fmt"
-	"github.com/c8112002/news-crawler/utils"
+
+	"github.com/c8112002/news-crawler/internal/pkg/utils"
 )
 
 func MakeSites(db *sql.DB) {

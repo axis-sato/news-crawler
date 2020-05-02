@@ -3,7 +3,7 @@ package crawler
 import (
 	"fmt"
 
-	"github.com/c8112002/news-crawler/entities"
+	"github.com/c8112002/news-crawler/internal/pkg/entities"
 )
 
 type ArticleResponse interface {

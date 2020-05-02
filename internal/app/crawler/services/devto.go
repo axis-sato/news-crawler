@@ -3,9 +3,9 @@ package services
 import (
 	"time"
 
-	"github.com/c8112002/news-crawler/crawler"
-	"github.com/c8112002/news-crawler/entities"
-	"github.com/c8112002/news-crawler/store"
+	"github.com/c8112002/news-crawler/internal/app/crawler/crawler"
+	"github.com/c8112002/news-crawler/internal/app/crawler/store"
+	"github.com/c8112002/news-crawler/internal/pkg/entities"
 	log "github.com/sirupsen/logrus"
 )
 

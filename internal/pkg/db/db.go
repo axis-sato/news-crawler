@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 
-	"github.com/c8112002/news-crawler/utils"
+	"github.com/c8112002/news-crawler/internal/pkg/utils"
 )
 
 func New(env utils.Env) (*sql.DB, error) {

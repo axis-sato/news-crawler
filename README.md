@@ -15,6 +15,7 @@ migration
 
 ```bash
 ./bin/dev.sh migrate! up
+./bin/dev.sh migrate! down
 ```
 
 seeding
@@ -23,12 +24,18 @@ seeding
 ./bin/dev.sh seed
 ```
 
+reset
+
+```bash
+./bin/dev.sh reset
+```
+
 
 ### production
 
 crawling
 
 ```bash
-docker build -t crawler -f docker/go/Dockerfile .
+docker build -t crawler -f docker/go/Dockerfile-crawler .
 docker run crawler
 ```
