@@ -2,3 +2,4 @@
 news-crawler
 .env
 .env**.local
+docs/*.bak

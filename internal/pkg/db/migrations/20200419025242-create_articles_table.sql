@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `image` VARCHAR(255) NULL,
   `crawled_at` TIMESTAMP NOT NULL,
   `sites_id` INT UNSIGNED NOT NULL,
-  `original_id` VARCHAR(255) NULL,
+  `original_id` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_articles_sites_idx` (`sites_id` ASC) VISIBLE,
   INDEX `crawled_at_idx` (`crawled_at` ASC) VISIBLE,
