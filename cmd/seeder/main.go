@@ -9,11 +9,11 @@ import (
 
 func main() {
 
-	if err := utils.LoadEnv(); err != nil {
+	if err := utils.Init(); err != nil {
 		panic(err.Error())
 	}
 
-	d, err := db.New(utils.GetEnv())
+	d, err := db.New()
 	if err != nil {
 		panic(err.Error())
 	}

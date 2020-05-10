@@ -24,9 +24,9 @@ func init() {
 }
 
 func main() {
-	loadEnv()
+	initEnv()
 
-	d, err := db.New(utils.GetEnv())
+	d, err := db.New()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -51,8 +51,8 @@ func main() {
 
 }
 
-func loadEnv() {
-	if err := utils.LoadEnv(); err != nil {
+func initEnv() {
+	if err := utils.Init(); err != nil {
 		panic(err.Error())
 	}
 }

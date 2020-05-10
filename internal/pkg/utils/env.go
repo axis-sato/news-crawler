@@ -14,7 +14,19 @@ const (
 	Production
 )
 
-func LoadEnv() error {
+var AppEnv Env
+
+func Init() error {
+	if err := loadEnv(); err != nil {
+		return err
+	}
+
+	setEnv()
+
+	return nil
+}
+
+func loadEnv() error {
 
 	env := os.Getenv("APP_ENV")
 	if "" == env {
@@ -26,18 +38,18 @@ func LoadEnv() error {
 		_ = godotenv.Load(".env.local")
 	}
 	_ = godotenv.Load(".env." + env)
-	_ = godotenv.Load()
+	_ = godotenv.Load() // The Original .env
 
 	return nil
 }
 
-func GetEnv() Env {
+func setEnv() {
 	switch os.Getenv("APP_ENV") {
 	case "development":
-		return Development
-	case "development-docker":
-		return DevelopmentDocker
+		AppEnv = Development
+	case "development.docker":
+		AppEnv = DevelopmentDocker
 	default:
-		return Production
+		AppEnv = Production
 	}
 }

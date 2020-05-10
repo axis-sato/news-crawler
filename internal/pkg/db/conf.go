@@ -1,6 +1,7 @@
 package db
 
 import (
+	"github.com/c8112002/news-crawler/internal/pkg/utils"
 	"github.com/spf13/viper"
 )
 
@@ -15,20 +16,26 @@ func readDBConf() (*dbconf, error) {
 		return &c, err
 	}
 
-	if err := viper.Unmarshal(&c); err != nil {
-		return &c, err
+	var key string
+	switch utils.AppEnv {
+	case utils.Development:
+		key = "development"
+	case utils.DevelopmentDocker:
+		key = "development.docker"
+	case utils.Production:
+		key = "production"
+	default:
+		key = "production"
 	}
 
-	return &c, nil
+	return &dbconf{
+		Dialect:    viper.GetString(key + ".dialect"),
+		Datasource: viper.GetString(key + ".datasource"),
+		Dir:        viper.GetString(key + ".dir"),
+	}, nil
 }
 
 type dbconf struct {
-	Development       param
-	DevelopmentDocker param
-	Production        param
-}
-
-type param struct {
 	Dialect    string
 	Datasource string
 	Dir        string
