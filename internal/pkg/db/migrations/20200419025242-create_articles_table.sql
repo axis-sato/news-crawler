@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  `image` VARCHAR(255) NULL,
+  `image` TEXT NULL,
   `crawled_at` TIMESTAMP NOT NULL,
   `sites_id` INT UNSIGNED NOT NULL,
   `original_id` VARCHAR(255) NOT NULL,
