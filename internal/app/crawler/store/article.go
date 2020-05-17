@@ -37,7 +37,12 @@ func (as *ArticleStore) saveArticle(article *entities.Article, tag *entities.Tag
 	if err != nil {
 		return nil, err
 	}
-	res, err := articleInsert.Exec(article.Title, article.URL, article.URL, article.CrawledAt, site.ID, article.OriginalID)
+	var res sql.Result
+	if article.Image == "" {
+		res, err = articleInsert.Exec(article.Title, article.URL, nil, article.CrawledAt, site.ID, article.OriginalID)
+	} else {
+		res, err = articleInsert.Exec(article.Title, article.URL, article.Image, article.CrawledAt, site.ID, article.OriginalID)
+	}
 	if err != nil {
 		return nil, err
 	}
