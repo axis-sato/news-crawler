@@ -1,11 +1,17 @@
 package main
 
 import (
+	"time"
+
 	"github.com/c8112002/news-crawler/internal/pkg/db"
 	"github.com/c8112002/news-crawler/internal/pkg/db/seeds"
 	"github.com/c8112002/news-crawler/internal/pkg/utils"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+func init() {
+	time.Local = time.FixedZone("Asia/Tokyo", 9*60*60)
+}
 
 func main() {
 

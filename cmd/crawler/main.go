@@ -17,6 +17,7 @@ import (
 var now time.Time
 
 func init() {
+	time.Local = time.FixedZone("Asia/Tokyo", 9*60*60)
 	now = time.Now()
 	log.SetLevel(log.DebugLevel)
 	log.SetReportCaller(true)
