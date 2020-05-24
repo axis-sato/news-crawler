@@ -20,9 +20,9 @@ func NewSiteStore(db *sql.DB) *SiteStore {
 	return &SiteStore{db: db}
 }
 
-func (ss *SiteStore) GetQiita() (*entities.Site, error) {
+func (ss *SiteStore) GetSite(siteID int) (*entities.Site, error) {
 	var site entities.Site
-	err := ss.db.QueryRow("SELECT id, name, url FROM sites WHERE ID = ?", qiitaID).Scan(&site.ID, &site.Name, &site.URL)
+	err := ss.db.QueryRow("SELECT id, name, url FROM sites WHERE ID = ?", siteID).Scan(&site.ID, &site.Name, &site.URL)
 	if err != nil {
 		return nil, err
 	}
@@ -30,12 +30,10 @@ func (ss *SiteStore) GetQiita() (*entities.Site, error) {
 	return &site, nil
 }
 
-func (ss *SiteStore) GetDevTo() (*entities.Site, error) {
-	var site entities.Site
-	err := ss.db.QueryRow("SELECT id, name, url FROM sites WHERE ID = ?", devDotToID).Scan(&site.ID, &site.Name, &site.URL)
-	if err != nil {
-		return nil, err
-	}
+func (ss *SiteStore) GetQiita() (*entities.Site, error) {
+	return ss.GetSite(qiitaID)
+}
 
-	return &site, nil
+func (ss *SiteStore) GetDevTo() (*entities.Site, error) {
+	return ss.GetSite(devDotToID)
 }

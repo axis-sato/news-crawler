@@ -16,16 +16,21 @@ type Article struct {
 	Tags       *Tags
 }
 
-func NewArticle(originalID string, title string, url string, image string, crawledAt time.Time) *Article {
+func NewArticle(originalID string, title string, url string, image string, crawledAt time.Time, site *Site, tags *Tags) *Article {
 	return &Article{
 		OriginalID: originalID,
 		Title:      title,
 		URL:        url,
 		Image:      image,
 		CrawledAt:  crawledAt,
-		Site:       nil,
-		Tags:       nil,
+		Site:       site,
+		Tags:       tags,
 	}
+}
+
+func (a *Article) IsDuplicatedWith(target *Article) bool {
+	return a.Site.ID == target.Site.ID &&
+		a.OriginalID == target.OriginalID
 }
 
 func (a Article) String() string {

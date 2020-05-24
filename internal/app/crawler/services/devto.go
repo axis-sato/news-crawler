@@ -32,7 +32,7 @@ func (ds *DevToService) Crawl(now time.Time) error {
 	if err != nil {
 		return err
 	}
-	return saveArticle(now, results, devto, ds.as)
+	return saveArticle(now, results, devto, ds.as, ds.ss)
 }
 
 func crawlDevTo(tags *entities.Tags, lastNDays int) []crawler.CrawlingResult {

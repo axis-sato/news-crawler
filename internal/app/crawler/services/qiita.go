@@ -27,7 +27,7 @@ func (qs *QiitaService) Crawl(now time.Time) error {
 	if err != nil {
 		return err
 	}
-	return saveArticle(now, results, qiita, qs.as)
+	return saveArticle(now, results, qiita, qs.as, qs.ss)
 }
 
 func crawlQiita(now time.Time, tags *entities.Tags) []crawler.CrawlingResult {
