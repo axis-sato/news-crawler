@@ -1,10 +1,10 @@
 development:
   dialect: mysql
-  datasource: news_crawler:news_crawler_password@tcp(localhost:3309)/news_crawler?charset=utf8mb4&parseTime=True&loc=Local
+  datasource: news:news_password@tcp(localhost:3309)/news?charset=utf8mb4&parseTime=True&loc=Local
   dir: internal/pkg/db/migrations
 development.docker:
   dialect: mysql
-  datasource: news_crawler:news_crawler_password@tcp(db:3306)/news_crawler?charset=utf8mb4&parseTime=True&loc=Local
+  datasource: news:news_password@tcp(host.docker.internal:3309)/news?charset=utf8mb4&parseTime=True&loc=Local
   dir: internal/pkg/db/migrations
 production:
   dialect: mysql
