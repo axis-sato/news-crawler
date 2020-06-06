@@ -5,10 +5,11 @@ cd "$(dirname "$0")/.." || exit
 docker build -t crawler \
   -f docker/go/Dockerfile .
 
-docker run crawler \
+docker run \
   -e MYSQL_USER \
   -e MYSQL_PASSWORD \
   -e MYSQL_HOST \
   -e MYSQL_PORT \
-  -e MYSQL_DATABASE
+  -e MYSQL_Dcrawler \
+  crawler
 

@@ -3,6 +3,7 @@ package db
 import (
 	"github.com/c8112002/news-crawler/internal/pkg/utils"
 	"github.com/spf13/viper"
+	"os"
 )
 
 func readDBConf() (*dbconf, error) {
@@ -30,7 +31,7 @@ func readDBConf() (*dbconf, error) {
 
 	return &dbconf{
 		Dialect:    viper.GetString(key + ".dialect"),
-		Datasource: viper.GetString(key + ".datasource"),
+		Datasource: os.ExpandEnv(viper.GetString(key + ".datasource")),
 		Dir:        viper.GetString(key + ".dir"),
 	}, nil
 }
