@@ -3,7 +3,7 @@
 cd "$(dirname "$0")/.." || exit
 
 docker build -t crawler \
-  -f docker/go/Dockerfile-crawler .
+  -f docker/go/Dockerfile .
 
 docker run crawler \
   -e MYSQL_USER \

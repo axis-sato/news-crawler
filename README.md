@@ -1,5 +1,7 @@
 # News Crawler
 
+![Deploy Crawler](https://github.com/c8112002/news-crawler/workflows/Deploy%20Crawler/badge.svg)
+
 ## Getting started
 
 ### dev
