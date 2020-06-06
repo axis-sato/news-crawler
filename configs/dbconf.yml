@@ -8,5 +8,5 @@ development.docker:
   dir: internal/pkg/db/migrations
 production:
   dialect: mysql
-  datasource:
+  datasource: ${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE}?charset=utf8mb4&parseTime=True&loc=Local
   dir: internal/pkg/db/migrations
