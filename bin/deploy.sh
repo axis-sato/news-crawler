@@ -6,6 +6,7 @@ docker build -t crawler \
   -f docker/go/Dockerfile .
 
 docker run \
+  --net="host" \
   -e MYSQL_USER \
   -e MYSQL_PASSWORD \
   -e MYSQL_HOST \
