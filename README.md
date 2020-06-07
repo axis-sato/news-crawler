@@ -18,5 +18,6 @@ docker-compose exec app go run main.go
 crawling
 
 ```bash
-./bin/deploy.sh
+./bin/build.sh
+./bin/crawl.sh
 ```
