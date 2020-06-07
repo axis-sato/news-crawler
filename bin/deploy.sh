@@ -11,6 +11,6 @@ docker run \
   -e MYSQL_PASSWORD \
   -e MYSQL_HOST \
   -e MYSQL_PORT \
-  -e MYSQL_Dcrawler \
+  -e MYSQL_DATABASE \
   crawler
 
